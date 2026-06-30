@@ -6,6 +6,7 @@ gem 'puma'
 gem 'rackup'
 gem 'rspec'
 gem 'sinatra'
+gem 'mini_magick'
 
 group :development do
   gem 'rubocop'

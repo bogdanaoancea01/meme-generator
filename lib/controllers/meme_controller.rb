@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require './lib/services/image_download_service'
+require './lib/services/meme_generator_service'
 require './lib/dtos/meme'
 require './lib/dtos/response'
 
@@ -12,7 +13,9 @@ class MemeController
     if img_service_response.nil?
       Response.new(400)
     else
-      Response.new(303, 'https://picsum.photos/200')
+      meme_service_response = MemeGeneratorService.generate(img_service_response, meme_info.text)
+
+      Response.new(303, File.basename(meme_service_response))
     end
   end
 end
