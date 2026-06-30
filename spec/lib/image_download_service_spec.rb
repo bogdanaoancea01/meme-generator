@@ -11,6 +11,7 @@ RSpec.describe ImageDownloadService do
         file_path = described_class.download(url)
 
         expect(File.exist?(file_path)).to be true
+        File.delete(file_path)
       end
     end
 

@@ -4,11 +4,30 @@ require './lib/controllers/meme_controller'
 
 RSpec.describe MemeController do
   describe '#execute' do
-    it 'returns the response status and image url' do
-      result = described_class.new.execute
+    context 'it recieves an image from the service' do
+        let(:img_path) {'images/test.jpg'}
 
-      expect(result.response_status).to eq(303)
-      expect(result.redirect_url).to eq('https://picsum.photos/200')
+        it 'returns response status 303 and image url' do
+        allow(ImageDownloadService).to receive(:download).and_return(img_path)
+
+        result = described_class.new.execute
+
+        expect(result.response_status).to eq(303)
+        expect(result.redirect_url).to eq('https://picsum.photos/200')
+        end
+    end
+
+    context 'service failed - no downloaded image' do 
+        let(:img_path) { nil }
+
+        it 'returns response status 400 and nil' do
+            allow(ImageDownloadService).to receive(:download).and_return(img_path)
+
+            result = described_class.new.execute
+
+            expect(result.response_status).to eq(400)
+            expect(result.redirect_url).to be(nil)
+        end
     end
   end
 end
