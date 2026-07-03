@@ -16,7 +16,7 @@ RSpec.describe ImageDownloadService do
     end
 
     context 'invalid / non-existing url' do
-      let(:url) { '//picsum.photos/200' }
+      let(:url) { 'https://picsum.photos/200dddddddddd' }
 
       it 'catches an error and returns nil' do
         response = described_class.download(url)

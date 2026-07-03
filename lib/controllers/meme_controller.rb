@@ -6,8 +6,18 @@ require './lib/dtos/meme'
 require './lib/dtos/response'
 
 class MemeController
-  def execute
-    meme_info = Meme.new('https://picsum.photos/200', 'Generate description')
+  def execute(body)
+    meme_json = body["meme"]
+
+    meme_info = Meme.new(
+      meme_json["image_url"],
+      meme_json["text"]
+    )
+
+    if meme_info.image_url.nil? || meme_info.text.nil?
+      return Response.new(400)
+    end
+
     img_service_response = ImageDownloadService.download(meme_info.image_url)
 
     if img_service_response.nil?
