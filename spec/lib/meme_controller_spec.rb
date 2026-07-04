@@ -54,7 +54,7 @@ RSpec.describe MemeController do
     end
 
     context 'when the image download fails' do 
-      let(:body) {File.read('spec/fixtures/wrong_url.json')}
+      let(:body) {File.read('spec/fixtures/wrong_url_test.json')}
 
       it 'returns response status 400' do
         allow(ImageDownloadService).to receive(:download).and_return(nil)

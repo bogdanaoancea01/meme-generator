@@ -7,6 +7,11 @@ require './lib/dtos/response'
 
 class MemeController
   def execute(body)
+    
+    if body.nil? || body.empty?
+      return Response.new(400)
+    end
+
     meme_json = body["meme"]
 
     meme_info = Meme.new(
