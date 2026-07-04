@@ -16,12 +16,10 @@ RSpec.describe 'Meme API' do
   context "when the request is correct" do 
     let(:body) {File.read('spec/fixtures/meme_test.json')}
 
-    it "it returns status code 200" do
+    it "it returns status code 303" do
       post '/memes', body, {'CONTENT_TYPE' => 'application/json'}
 
-      response = MemeController.new.execute(JSON.parse(body))
-
-      expect(last_response.status).to eq(response.response_status)
+      expect(last_response.status).to eq(303)
     end
   end
 
@@ -31,9 +29,7 @@ RSpec.describe 'Meme API' do
     it "returns status code 400" do
       post '/memes', body, {'CONTENT_TYPE' => 'application/json'}
 
-      response = MemeController.new.execute(JSON.parse(body))
-
-      expect(last_response.status).to eq response.response_status
+      expect(last_response.status).to eq(400)
     end
   end
 
@@ -43,9 +39,7 @@ RSpec.describe 'Meme API' do
     it "returns status code 400" do
       post '/memes', body, {'CONTENT_TYPE' => 'application/json'}
 
-      response = MemeController.new.execute(JSON.parse(body))
-
-      expect(last_response.status).to eq(response.response_status)
+      expect(last_response.status).to eq(400)
     end
   end
 
@@ -55,9 +49,7 @@ RSpec.describe 'Meme API' do
     it "returns status code 400" do
       post '/memes', body, {'CONTENT_TYPE' => 'application/json'}
 
-      response = MemeController.new.execute(JSON.parse(body))
-
-      expect(last_response.status).to eq(response.response_status)
+      expect(last_response.status).to eq(400)
     end
   end
 
@@ -67,9 +59,7 @@ RSpec.describe 'Meme API' do
     it "returns status code 400" do
       post '/memes', body, {'CONTENT_TYPE' => 'application/json'}
 
-      response = MemeController.new.execute(JSON.parse(body))
-
-      expect(last_response.status).to eq(response.response_status)
+      expect(last_response.status).to eq(400)
     end
   end
 end
