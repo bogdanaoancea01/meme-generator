@@ -3,7 +3,7 @@
 require 'mini_magick'
 
 class MemeGeneratorService
-  def self.generate(file_path, text)
+  def generate(file_path, text)
     generated_file_path = file_path.sub(/original_/, 'generated_')
     image = MiniMagick::Image.open(file_path)
     image.combine_options do |c|

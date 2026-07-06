@@ -8,18 +8,22 @@ require './lib/services/json_parser_service'
 require 'json'
 
 class MemeController
-  def execute(body)
-    meme = JsonParserService.new.parse(body)
-    error_message = validate_meme(meme)
+  def initialize(downloader: ImageDownloadService.new, generator: MemeGeneratorService.new, parser: JsonParserService.new)
+    @downloader = downloader
+    @generator = generator
+    @parser = parser
+  end
 
+  def execute(body)
+    meme = @parser.parse(body)
+
+    error_message = validate_meme(meme)
     return Response.new(message: error_message) if error_message
 
-    downloaded_image_path = ImageDownloadService.download(meme.image_url)
-
+    downloaded_image_path = @downloader.download(meme.image_url)
     return Response.new(message: 'Failed to download image') if downloaded_image_path.nil?
 
-    generated_image_path = MemeGeneratorService.generate(downloaded_image_path, meme.text)
-
+    generated_image_path = @generator.generate(downloaded_image_path, meme.text)
     Response.new(redirect_url: File.basename(generated_image_path))
   end
 

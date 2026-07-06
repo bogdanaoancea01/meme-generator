@@ -6,7 +6,7 @@ class ImageDownloadService
   FOLDER_PATH = 'images/'
   MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024
 
-  def self.download(url)
+  def download(url)
     file_path = "#{FOLDER_PATH}original_#{SecureRandom.uuid}.png"
 
     begin
