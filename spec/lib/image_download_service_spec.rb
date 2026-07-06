@@ -6,7 +6,7 @@ RSpec.describe ImageDownloadService do
   describe '.download' do
     context 'the given url exists / is correct' do
       let(:url) { 'https://picsum.photos/200' }
-      let(:img_file) { File.open("spec/fixtures/test_original_1.png", "rb") }
+      let(:img_file) { File.open('spec/fixtures/test_original_1.png', 'rb') }
 
       it 'downloads an image and saves it to images folder, returning the path' do
         allow(URI).to receive(:open).with(url).and_yield(img_file)

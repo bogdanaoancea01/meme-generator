@@ -2,11 +2,11 @@
 
 source 'https://rubygems.org'
 
+gem 'mini_magick'
 gem 'puma'
 gem 'rackup'
 gem 'rspec'
 gem 'sinatra'
-gem 'mini_magick'
 
 group :development do
   gem 'rubocop'

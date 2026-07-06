@@ -1,13 +1,12 @@
+# frozen_string_literal: true
+
 class JsonParserService
-    def parse(body)
-        if body.nil? || body.empty?
-            return nil
-        end
-        
-        root = body["meme"]
-        if root.nil? || root.empty?
-            return nil
-        end
-        Meme.new(root["image_url"], root["text"])
-    end
+  def parse(body)
+    return nil if body.nil? || body.empty?
+
+    root = body['meme']
+    return nil if root.nil? || root.empty?
+
+    Meme.new(root['image_url'], root['text'])
+  end
 end
