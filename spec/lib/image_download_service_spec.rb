@@ -30,5 +30,21 @@ RSpec.describe ImageDownloadService do
         expect(response).to be(nil)
       end
     end
+
+    context 'when the file is too large to download' do
+      let(:url) { 'https://picsum.photos/200' }
+      let(:img_file) { File.open('spec/fixtures/test_original_1.png', 'rb') }
+
+      it 'returns nil' do
+        allow(img_file).to receive(:read)
+          .and_return('test' * (ImageDownloadService::MAX_FILE_SIZE_BYTES + 1))
+
+        allow(URI).to receive(:open).with(url).and_yield(img_file)
+
+        response = described_class.download(url)
+
+        expect(response).to be(nil)
+      end
+    end
   end
 end
