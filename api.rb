@@ -2,10 +2,15 @@
 
 require 'bundler/setup'
 require 'sinatra'
+require 'sinatra/activerecord'
 require 'json'
 require './lib/controllers/meme_controller'
 require './lib/dtos/meme'
 require './lib/services/image_download_service'
+require './lib/models/user'
+
+
+set :database_file, 'config/database.yml'
 
 post '/memes' do
   body = JSON.parse(request.body.read)

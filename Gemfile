@@ -7,6 +7,10 @@ gem 'puma'
 gem 'rackup'
 gem 'rspec'
 gem 'sinatra'
+gem 'activerecord'
+gem 'sinatra-activerecord'
+gem 'sqlite3'
+gem 'rake'
 
 group :development do
   gem 'rubocop'
