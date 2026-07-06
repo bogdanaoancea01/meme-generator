@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 class Response
-  attr_reader :response_status, :message, :redirect_url
+  attr_reader :message, :redirect_url
 
-  def initialize(response_status, message = nil, redirect_url = nil)
-    @response_status = response_status
+  def initialize(message: nil, redirect_url: nil)
     @message = message
     @redirect_url = redirect_url
   end

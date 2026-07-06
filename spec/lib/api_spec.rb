@@ -30,6 +30,8 @@ RSpec.describe 'Meme API' do
       post '/memes', body, {'CONTENT_TYPE' => 'application/json'}
 
       expect(last_response.status).to eq(400)
+      response_body = JSON.parse(last_response.body)['message']
+      expect(response_body).to include("Check URL field")
     end
   end
 
@@ -40,6 +42,8 @@ RSpec.describe 'Meme API' do
       post '/memes', body, {'CONTENT_TYPE' => 'application/json'}
 
       expect(last_response.status).to eq(400)
+      response_body = JSON.parse(last_response.body)['message']
+      expect(response_body).to include("Check text field")
     end
   end
 
@@ -50,6 +54,8 @@ RSpec.describe 'Meme API' do
       post '/memes', body, {'CONTENT_TYPE' => 'application/json'}
 
       expect(last_response.status).to eq(400)
+      response_body = JSON.parse(last_response.body)['message']
+      expect(response_body).to include("Failed to download image")
     end
   end
 
@@ -60,6 +66,8 @@ RSpec.describe 'Meme API' do
       post '/memes', body, {'CONTENT_TYPE' => 'application/json'}
 
       expect(last_response.status).to eq(400)
+      response_body = JSON.parse(last_response.body)['message']
+      expect(response_body).to include("Empty body")
     end
   end
 end

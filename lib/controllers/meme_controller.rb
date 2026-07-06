@@ -4,31 +4,31 @@ require './lib/services/image_download_service'
 require './lib/services/meme_generator_service'
 require './lib/dtos/meme'
 require './lib/dtos/response'
-require './lib/controllers/json_parser.rb'
+require './lib/services/json_parser_service.rb'
 require "json"
 
 class MemeController
   def execute(body)
 
-    meme_info = JsonParser.new.parse(body)
+    meme = JsonParserService.new.parse(body)
+    error_message = validate_meme(meme)
 
-    return Response.new(400, "Empty body") if meme_info.nil?
+    return Response.new(message: error_message) if error_message
 
-    if meme_info.image_url.nil? || meme_info.image_url.empty?
-      return Response.new(400, "Check URL field")
-    end
+    downloaded_image_path = ImageDownloadService.download(meme.image_url)
 
-    if meme_info.text.nil? || meme_info.text.empty?
-      return Response.new(400, "Check text field")
-    end
+    return Response.new(message: "Failed to download image") if downloaded_image_path.nil?
 
-    img_service_response = ImageDownloadService.download(meme_info.image_url)
+    generated_image_path = MemeGeneratorService.generate(downloaded_image_path, meme.text)
 
-    return Response.new(400, "No image downloaded") if img_service_response.nil?
+    Response.new(redirect_url: File.basename(generated_image_path))
 
-    meme_service_response = MemeGeneratorService.generate(img_service_response, meme_info.text)
+  end
 
-    Response.new(303, "Success", File.basename(meme_service_response))
-
+  private
+  def validate_meme(meme)
+    return "Empty body" if meme.nil?
+    return "Check URL field" if meme.image_url.to_s.empty?
+    return  "Check text field" if meme.text.to_s.empty?
   end
 end

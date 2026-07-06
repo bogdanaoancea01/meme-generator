@@ -12,7 +12,11 @@ post "/memes" do
 
   response = MemeController.new.execute(body)
 
-  redirect "/memes/#{response.redirect_url}", response.response_status
+  if response.message.nil?
+    redirect "/memes/#{response.redirect_url}", 303
+  else
+    [ 400, { "Content-Type" => "application/json" }, { message: response.message }.to_json ]
+  end
 end
 
 get "/memes/:file" do
