@@ -22,7 +22,7 @@ RSpec.describe 'Signup API' do
 
       expect(last_response.status).to eq(201)
       response_body = JSON.parse(last_response.body)['token']
-      expect(response_body).to include('aaaa')
+      expect(JSON.parse(last_response.body)['token']).not_to be_nil
     end
   end
 

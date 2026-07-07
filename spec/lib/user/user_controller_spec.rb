@@ -41,4 +41,44 @@ RSpec.describe UserController do
             end
         end
     end
+
+    describe "#login" do
+        context 'when username and password match' do
+            before do
+                User.create!(username: 'mr_bean', password: BCrypt::Password.create('test123').to_s)
+            end
+
+            let(:body) { File.read('spec/fixtures/user/user_test.json') }
+
+            it 'returns true' do
+                result = described_class.new.login(JSON.parse(body))
+
+                expect(result).to be(true)
+            end
+        end
+
+        context 'when username and password match' do
+            before do
+                User.create!(username: 'mr_bean', password: BCrypt::Password.create('wrong_pass').to_s)
+            end
+
+            let(:body) { File.read('spec/fixtures/user/user_test.json') }
+
+            it 'returns false' do
+                result = described_class.new.login(JSON.parse(body))
+
+                expect(result).to be(false)
+            end
+        end
+
+        context 'when username does not exist' do
+            let(:body) { File.read('spec/fixtures/user/user_test.json') }
+
+            it 'returns false' do
+                result = described_class.new.login(JSON.parse(body))
+
+                expect(result).to be(false)
+            end
+        end
+    end
 end

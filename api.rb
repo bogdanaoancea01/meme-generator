@@ -34,7 +34,7 @@ end
 post '/signup' do
   body = JSON.parse(request.body.read)
 
-  user = UserController.new.execute(body)
+  user = UserController.new.signup(body)
 
   if user.errors.any?
     return [
@@ -53,4 +53,15 @@ post '/signup' do
   user.save
 
   [201, { 'Content-Type' => 'application/json' }, { token: 'aaaa' }.to_json]
+end
+
+post '/login' do
+  body = JSON.parse(request.body.read)
+  
+  login_successfull = UserController.new.login(body)
+
+  return [409, { 'Content-Type' => 'application/json' }, ''] if !login_successfull 
+
+  [200, { 'Content-Type' => 'application/json' }, { token: 'aaaa' }.to_json]
+
 end

@@ -19,4 +19,18 @@ class UserController
 
     new_user
   end
+
+  def login(body)
+    user = @parser.parse(body, 'user')
+    return false if user.nil?
+
+    found_user = User.find_by(username: user.username)
+    return false if found_user.nil?
+
+    if BCrypt::Password.new(found_user.password) == user.password
+        return true
+    else
+        return false
+    end
+  end
 end
