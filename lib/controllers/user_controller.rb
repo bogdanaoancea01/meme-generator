@@ -1,6 +1,5 @@
 require 'sinatra/activerecord'
 require './lib/services/json_parser_service'
-require './lib/dtos/auth_response'
 require 'jwt'
 
 
@@ -16,14 +15,14 @@ class UserController
 
     add_errors(new_user)
 
-    return AuthResponse.new(outcome: :invalid, errors: new_user.errors) if new_user.errors.any?
-    return AuthResponse.new(outcome: :already_in_db) if User.find_by(username: new_user.username)
+    return new_user if new_user.errors.any?
+    return nil if User.find_by(username: new_user.username)
 
     new_user.password = BCrypt::Password.create(new_user.password).to_s
     new_user.token = generate_token(new_user.username)
     new_user.save
 
-    AuthResponse.new(outcome: :created, token: new_user.token)
+    new_user
   end
 
   def login(body)
@@ -33,12 +32,10 @@ class UserController
     found_user = User.find_by(username: user.username)
     return false if found_user.nil?
 
-    if BCrypt::Password.new(found_user.password) == user.password
-        return generate_token(found_user.username)
-    else
-        return false
-    end
-  end
+    return false unless BCrypt::Password.new(found_user.password) == user.password
+
+    found_user.token
+end
 
   private
 

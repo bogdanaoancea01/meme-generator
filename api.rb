@@ -35,14 +35,13 @@ post '/signup' do
   body = JSON.parse(request.body.read)
   result = UserController.new.signup(body)
 
-  case result.outcome
-    when :invalid
-      [400, { 'Content-Type' => 'application/json' }, { errors: result.errors.map { |e| { message: e.message } } }.to_json]
-    when :already_in_db
-      [409, { 'Content-Type' => 'application/json' }, '']
-    when :created
-      [201, { 'Content-Type' => 'application/json' }, { token: result.token }.to_json]
+  return [409, { 'Content-Type' => 'application/json' }, ''] if result.nil?
+
+  if result.errors.any?
+    return [400, { 'Content-Type' => 'application/json' }, { errors: result.errors.map { |e| { message: e.message } } }.to_json]
   end
+
+  [201, { 'Content-Type' => 'application/json' }, { token: result.token }.to_json]
 end
 
 post '/login' do
