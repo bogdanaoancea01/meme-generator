@@ -6,7 +6,7 @@ class UserController
         @parser = parser
     end
 
-  def execute(body)
+  def signup(body)
     new_user = @parser.parse(body, 'user')
 
     if new_user.username.nil? || new_user.username.empty?

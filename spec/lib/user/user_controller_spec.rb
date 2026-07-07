@@ -3,12 +3,12 @@
 require '././lib/controllers/user_controller'
 
 RSpec.describe UserController do
-    describe "#execute" do
+    describe "#signup" do
         context 'when username and password are present' do
             let (:body) { File.read('spec/fixtures/user/user_test.json') }
 
             it 'returns a User with the given username and password' do
-                result = described_class.new.execute(JSON.parse(body))
+                result = described_class.new.signup(JSON.parse(body))
 
                 expect(result).to be_a(User)
                 expect(result.username).to eq('mr_bean')
@@ -21,7 +21,7 @@ RSpec.describe UserController do
             let (:body) { File.read('spec/fixtures/user/no_username_test.json') }
 
             it 'adds a blank username error' do
-                result = described_class.new.execute(JSON.parse(body))
+                result = described_class.new.signup(JSON.parse(body))
 
                 expect(result).to be_a(User)
 
@@ -33,7 +33,7 @@ RSpec.describe UserController do
             let (:body) { File.read('spec/fixtures/user/no_password_test.json') }
 
             it 'adds a blank password error' do
-                result = described_class.new.execute(JSON.parse(body))
+                result = described_class.new.signup(JSON.parse(body))
 
                 expect(result).to be_a(User)
 
