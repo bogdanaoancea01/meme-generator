@@ -11,10 +11,21 @@ require './lib/dtos/meme'
 require './lib/services/image_download_service'
 require './lib/models/user'
 
-
 set :database_file, 'config/database.yml'
 
+helpers do
+  def authorization!
+    token = request.env['HTTP_AUTHORIZATION']&.split&.last
+    halt 401 if token.nil?
+    
+    user = User.find_by(token: token)
+    halt 401 unless user
+  end
+end
+
 post '/memes' do
+  authorization!
+  
   body = JSON.parse(request.body.read)
 
   response = MemeController.new.execute(body)

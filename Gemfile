@@ -13,6 +13,7 @@ gem 'sqlite3'
 gem 'rake'
 gem 'bcrypt'
 gem 'jwt'
+gem 'dotenv'
 
 group :development do
   gem 'rubocop'

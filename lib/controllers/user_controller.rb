@@ -1,10 +1,11 @@
 require 'sinatra/activerecord'
 require './lib/services/json_parser_service'
+require 'dotenv/load'
 require 'jwt'
 
 
 class UserController
-    JWT_SECRET = ENV.fetch('JWT_SECRET', 'super_secret_key')
+    JWT_SECRET_KEY = ENV['JWT_SECRET']
 
     def initialize(parser: JsonParserService.new)
         @parser = parser
@@ -40,8 +41,8 @@ end
   private
 
   def generate_token(username)
-    payload = { username: username, exp: Time.now.to_i + 3600 }
-    JWT.encode(payload, JWT_SECRET, 'HS256')
+    payload = { username: username }
+    JWT.encode(payload, JWT_SECRET_KEY, 'HS256')
   end
 
   def add_errors(user)
