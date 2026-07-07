@@ -1,7 +1,11 @@
 require 'sinatra/activerecord'
 require './lib/services/json_parser_service'
+require 'jwt'
+
 
 class UserController
+    JWT_SECRET = ENV.fetch('JWT_SECRET', 'super_secret_key')
+
     def initialize(parser: JsonParserService.new)
         @parser = parser
     end
@@ -28,7 +32,9 @@ class UserController
     return false if found_user.nil?
 
     if BCrypt::Password.new(found_user.password) == user.password
-        return true
+        payload = { username: found_user.username, exp: Time.now.to_i + 3600 }
+        token = JWT.encode(payload, JWT_SECRET, 'HS256')
+        return token
     else
         return false
     end

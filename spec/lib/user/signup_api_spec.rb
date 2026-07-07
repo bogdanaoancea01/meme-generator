@@ -21,8 +21,8 @@ RSpec.describe 'Signup API' do
       post '/signup', body, { 'CONTENT_TYPE' => 'application/json' }
 
       expect(last_response.status).to eq(201)
-      response_body = JSON.parse(last_response.body)['token']
-      expect(JSON.parse(last_response.body)['token']).not_to be_nil
+      token = JSON.parse(last_response.body)['token']
+      expect(token).not_to be_nil
     end
   end
 

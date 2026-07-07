@@ -58,10 +58,10 @@ end
 post '/login' do
   body = JSON.parse(request.body.read)
   
-  login_successfull = UserController.new.login(body)
+  login_response = UserController.new.login(body)
 
-  return [409, { 'Content-Type' => 'application/json' }, ''] if !login_successfull 
+  return [409, { 'Content-Type' => 'application/json' }, ''] if !login_response 
 
-  [200, { 'Content-Type' => 'application/json' }, { token: 'aaaa' }.to_json]
+  [200, { 'Content-Type' => 'application/json' }, { token: login_response }.to_json]
 
 end

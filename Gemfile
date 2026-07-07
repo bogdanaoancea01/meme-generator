@@ -12,6 +12,7 @@ gem 'sinatra-activerecord'
 gem 'sqlite3'
 gem 'rake'
 gem 'bcrypt'
+gem 'jwt'
 
 group :development do
   gem 'rubocop'

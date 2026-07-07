@@ -49,7 +49,18 @@ RSpec.describe 'Login API' do
             post '/login', body, { 'CONTENT_TYPE' => 'application/json' }
 
             expect(last_response.status).to eq(200)
-            expect(JSON.parse(last_response.body)['token']).not_to be_nil
+            token = JSON.parse(last_response.body)['token']
+            expect(token).not_to be_nil
+        end
+
+
+        it 'returns 200 and a valid token' do
+            post '/login', body, { 'CONTENT_TYPE' => 'application/json' }
+
+            expect(last_response.status).to eq(200)
+            token = JSON.parse(last_response.body)['token']
+            decoded_payload, = JWT.decode(token, UserController::JWT_SECRET, true, algorithm: 'HS256')
+            expect(decoded_payload['username']).to eq('mr_bean')
         end
     end
 end

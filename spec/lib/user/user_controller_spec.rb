@@ -50,10 +50,11 @@ RSpec.describe UserController do
 
             let(:body) { File.read('spec/fixtures/user/user_test.json') }
 
-            it 'returns true' do
+            it 'returns a token' do
                 result = described_class.new.login(JSON.parse(body))
 
-                expect(result).to be(true)
+                expect(result).to be_a(String)
+                expect(result).not_to be_nil
             end
         end
 
