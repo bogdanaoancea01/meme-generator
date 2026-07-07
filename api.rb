@@ -33,26 +33,16 @@ end
 
 post '/signup' do
   body = JSON.parse(request.body.read)
+  result = UserController.new.signup(body)
 
-  user = UserController.new.signup(body)
-
-  if user.errors.any?
-    return [
-      400,
-      { 'Content-Type' => 'application/json' },
-      { errors: user.errors.map { |error| { message: error.message } } }.to_json
-    ]
+  case result.outcome
+    when :invalid
+      [400, { 'Content-Type' => 'application/json' }, { errors: result.errors.map { |e| { message: e.message } } }.to_json]
+    when :already_in_db
+      [409, { 'Content-Type' => 'application/json' }, '']
+    when :created
+      [201, { 'Content-Type' => 'application/json' }, { token: result.token }.to_json]
   end
-
-  if User.find_by(username: user.username)
-    return [409, { 'Content-Type' => 'application/json' }, '']
-  end
-
-  plain_password = user.password
-  user.password = BCrypt::Password.create(plain_password).to_s
-  user.save
-
-  [201, { 'Content-Type' => 'application/json' }, { token: 'aaaa' }.to_json]
 end
 
 post '/login' do
