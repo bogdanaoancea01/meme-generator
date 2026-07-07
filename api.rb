@@ -33,7 +33,7 @@ post '/memes' do
   if response.message.nil?
     redirect "/memes/#{response.redirect_url}", 303
   else
-    [400, { 'Content-Type' => 'application/json' }, { message: response.message }.to_json]
+    halt 400, { 'Content-Type' => 'application/json' }, { message: response.message }.to_json
   end
 end
 
@@ -46,10 +46,10 @@ post '/signup' do
   body = JSON.parse(request.body.read)
   result = UserController.new.signup(body)
 
-  return [409, { 'Content-Type' => 'application/json' }, ''] if result.nil?
+  halt 409, { 'Content-Type' => 'application/json' }, '' if result.nil?
 
   if result.errors.any?
-    return [400, { 'Content-Type' => 'application/json' }, { errors: result.errors.map { |e| { message: e.message } } }.to_json]
+    halt 400, { 'Content-Type' => 'application/json' }, { errors: result.errors.map { |e| { message: e.message } } }.to_json
   end
 
   [201, { 'Content-Type' => 'application/json' }, { token: result.token }.to_json]
@@ -60,7 +60,7 @@ post '/login' do
   
   login_response = UserController.new.login(body)
 
-  return [409, { 'Content-Type' => 'application/json' }, ''] if !login_response 
+  halt 409 if !login_response 
 
   [200, { 'Content-Type' => 'application/json' }, { token: login_response }.to_json]
 
