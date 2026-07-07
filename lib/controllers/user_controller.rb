@@ -20,9 +20,10 @@ class UserController
     return AuthResponse.new(outcome: :already_in_db) if User.find_by(username: new_user.username)
 
     new_user.password = BCrypt::Password.create(new_user.password).to_s
+    new_user.token = generate_token(new_user.username)
     new_user.save
 
-    AuthResponse.new(outcome: :created, token: generate_token(new_user.username))
+    AuthResponse.new(outcome: :created, token: new_user.token)
   end
 
   def login(body)
@@ -41,8 +42,8 @@ class UserController
 
   private
 
-  def generate_token(user_id)
-    payload = { username: user_id, exp: Time.now.to_i + 3600 }
+  def generate_token(username)
+    payload = { username: username, exp: Time.now.to_i + 3600 }
     JWT.encode(payload, JWT_SECRET, 'HS256')
   end
 
