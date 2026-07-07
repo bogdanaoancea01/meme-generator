@@ -15,7 +15,7 @@ class MemeController
   end
 
   def execute(body)
-    meme = @parser.parse(body)
+    meme = @parser.parse(body, 'meme')
 
     error_message = validate_meme(meme)
     return Response.new(message: error_message) if error_message

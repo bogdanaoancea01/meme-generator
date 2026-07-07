@@ -1,12 +1,13 @@
 require 'sinatra/activerecord'
-require 'json'
+require './lib/services/json_parser_service'
 
 class UserController
-  def execute(request)
-    body = JSON.parse(request)
-    body = body['user']
+    def initialize(parser: JsonParserService.new)
+        @parser = parser
+    end
 
-    new_user = User.new(username: body['username'], password: body['password'])
+  def execute(body)
+    new_user = @parser.parse(body, 'user')
 
     if new_user.username.nil? || new_user.username.empty?
       new_user.errors.add(:username, :blank, message: 'Username is blank')

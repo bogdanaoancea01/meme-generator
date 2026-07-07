@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 class JsonParserService
-  def parse(body)
+  def parse(body, keyword)
     return nil if body.nil? || body.empty?
 
-    root = body['meme']
+    root = body[keyword]
     return nil if root.nil? || root.empty?
 
-    Meme.new(root['image_url'], root['text'])
+    return Meme.new(root['image_url'], root['text']) if keyword == 'meme'
+    return User.new(username: root['username'], password: root['password']) if keyword == 'user'
   end
 end

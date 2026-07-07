@@ -32,7 +32,9 @@ get '/memes/:file' do
 end
 
 post '/signup' do
-  user = UserController.new.execute(request.body.read)
+  body = JSON.parse(request.body.read)
+
+  user = UserController.new.execute(body)
 
   if user.errors.any?
     return [
