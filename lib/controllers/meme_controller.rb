@@ -3,7 +3,7 @@
 require './lib/services/image_download_service'
 require './lib/services/meme_generator_service'
 require './lib/dtos/meme'
-require './lib/dtos/response'
+require './lib/dtos/meme_response'
 require './lib/services/json_parser_service'
 require 'json'
 
@@ -18,13 +18,13 @@ class MemeController
     meme = @parser.parse(body, 'meme')
 
     error_message = validate_meme(meme)
-    return Response.new(message: error_message) if error_message
+    return MemeResponse.new(message: error_message) if error_message
 
     downloaded_image_path = @downloader.download(meme.image_url)
-    return Response.new(message: 'Failed to download image') if downloaded_image_path.nil?
+    return MemeResponse.new(message: 'Failed to download image') if downloaded_image_path.nil?
 
     generated_image_path = @generator.generate(downloaded_image_path, meme.text)
-    Response.new(redirect_url: File.basename(generated_image_path))
+    MemeResponse.new(redirect_url: File.basename(generated_image_path))
   end
 
   private

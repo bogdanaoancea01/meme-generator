@@ -6,7 +6,7 @@ require_relative '../../api'
 require 'rspec'
 require 'rack/test'
 require './lib/controllers/meme_controller'
-require './lib/dtos/response'
+require './lib/dtos/meme_response'
 require_relative '../spec_helper'
 
 RSpec.describe 'Meme API' do
