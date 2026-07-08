@@ -44,15 +44,15 @@ end
 
 post '/signup' do
   body = JSON.parse(request.body.read)
-  result = UserController.new.signup(body)
+  new_user = UserController.new.signup(body)
 
-  halt 409, { 'Content-Type' => 'application/json' }, '' if result.nil?
+  halt 409, { 'Content-Type' => 'application/json' }, '' if new_user.nil?
 
-  if result.errors.any?
-    halt 400, { 'Content-Type' => 'application/json' }, { errors: result.errors.map { |e| { message: e.message } } }.to_json
+  if new_user.errors.any?
+    halt 400, { 'Content-Type' => 'application/json' }, { errors: new_user.errors.map { |e| { message: e.message } } }.to_json
   end
 
-  [201, { 'Content-Type' => 'application/json' }, { token: result.token }.to_json]
+  [201, { 'Content-Type' => 'application/json' }, { token: new_user.token }.to_json]
 end
 
 post '/login' do
@@ -63,5 +63,4 @@ post '/login' do
   halt 409 if !login_response 
 
   [200, { 'Content-Type' => 'application/json' }, { token: login_response }.to_json]
-
 end

@@ -35,8 +35,10 @@ class UserController
 
     return false unless BCrypt::Password.new(found_user.password) == user.password
 
+    found_user.token = generate_token(found_user.username)
+    found_user.save
     found_user.token
-end
+  end
 
   private
 

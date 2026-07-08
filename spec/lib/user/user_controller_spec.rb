@@ -49,7 +49,7 @@ RSpec.describe UserController do
         let(:body) { File.read('spec/fixtures/user/user_test.json') }
 
         before do
-        User.create!(username: 'mr_bean', password: BCrypt::Password.create('test123').to_s)
+            User.create!(username: 'mr_bean', password: BCrypt::Password.create('test123').to_s)
         end
 
         it 'returns nil' do
@@ -63,8 +63,7 @@ RSpec.describe UserController do
     describe "#login" do
         context 'when username and password match' do
             before do
-                User.create!(username: 'mr_bean', password: BCrypt::Password.create('test123').to_s,
-                    token: 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im1yX2JlYW4iLCJleHAiOjE3ODM0Mjk4MzR9.xBeOJiOQPzKDMQlY-L45nGy06Imq1ZbSqFVoqAUOnAo')
+                User.create!(username: 'mr_bean', password: BCrypt::Password.create('test123').to_s)
             end
 
             let(:body) { File.read('spec/fixtures/user/user_test.json') }

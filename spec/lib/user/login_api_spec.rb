@@ -42,8 +42,7 @@ RSpec.describe 'Login API' do
         let(:body) { File.read('spec/fixtures/user/user_test.json') }
 
         before do
-            User.create!(username: 'mr_bean', password: BCrypt::Password.create('test123').to_s,
-                token: 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im1yX2JlYW4ifQ.fJOusXI5JFp6VqcRTr9frQlhI9Wx0Rxv953NAUyYo0w')
+            User.create!(username: 'mr_bean', password: BCrypt::Password.create('test123').to_s)
         end
 
         it 'returns status code 200 and a token' do
