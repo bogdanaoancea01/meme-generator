@@ -8,7 +8,8 @@ require './lib/services/json_parser_service'
 require 'json'
 
 class MemeController
-  def initialize(downloader: ImageDownloadService.new, generator: MemeGeneratorService.new, parser: JsonParserService.new)
+  def initialize(downloader: ImageDownloadService.new, generator: MemeGeneratorService.new,
+                 parser: JsonParserService.new)
     @downloader = downloader
     @generator = generator
     @parser = parser

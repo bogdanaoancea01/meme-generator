@@ -34,7 +34,7 @@ RSpec.describe 'Signup API' do
 
       expect(last_response.status).to eq(400)
       response_body = JSON.parse(last_response.body)['errors']
-      expect(response_body).to include({ "message" => "Username is blank" })
+      expect(response_body).to include({ 'message' => 'Username is blank' })
     end
   end
 
@@ -46,7 +46,7 @@ RSpec.describe 'Signup API' do
 
       expect(last_response.status).to eq(400)
       response_body = JSON.parse(last_response.body)['errors']
-      expect(response_body).to include({ "message" => "Password is blank" })
+      expect(response_body).to include({ 'message' => 'Password is blank' })
     end
   end
 

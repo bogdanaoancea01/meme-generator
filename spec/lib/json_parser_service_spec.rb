@@ -9,7 +9,7 @@ RSpec.describe JsonParserService do
       let(:body) { File.read('spec/fixtures/empty_json_test.json') }
 
       it 'returns nil' do
-        result = described_class.new.parse(body,'meme')
+        result = described_class.new.parse(body, 'meme')
         expect(result).to be(nil)
       end
     end

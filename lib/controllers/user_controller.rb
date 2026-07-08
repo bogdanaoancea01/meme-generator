@@ -3,13 +3,12 @@ require './lib/services/json_parser_service'
 require 'dotenv/load'
 require 'jwt'
 
-
 class UserController
-    JWT_SECRET_KEY = ENV['JWT_SECRET']
+  JWT_SECRET_KEY = ENV['JWT_SECRET']
 
-    def initialize(parser: JsonParserService.new)
-        @parser = parser
-    end
+  def initialize(parser: JsonParserService.new)
+    @parser = parser
+  end
 
   def signup(body)
     new_user = @parser.parse(body, 'user')
@@ -48,13 +47,10 @@ class UserController
   end
 
   def add_errors(user)
-    if user.username.nil? || user.username.empty?
-      user.errors.add(:username, :blank, message: 'Username is blank')
-    end
+    user.errors.add(:username, :blank, message: 'Username is blank') if user.username.nil? || user.username.empty?
 
-    if user.password.nil? || user.password.empty?
-      user.errors.add(:password, :blank, message: 'Password is blank')
-    end
+    return unless user.password.nil? || user.password.empty?
+
+    user.errors.add(:password, :blank, message: 'Password is blank')
   end
-  
 end

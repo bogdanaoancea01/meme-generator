@@ -1,2 +1,2 @@
 require 'sinatra/activerecord/rake'
-require "./api"
+require './api'

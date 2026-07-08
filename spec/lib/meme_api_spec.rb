@@ -19,7 +19,6 @@ RSpec.describe 'Meme API' do
   let(:user) { User.create!(username: 'mr_bean', password: BCrypt::Password.create('test123').to_s, token: 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im1yX2JlYW4ifQ.A38hP8ZL1AZm7fNPxROjqWu6RslI_elhH_u6QIXOgoA') }
   let(:headers) { { 'CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => "Bearer #{user.token}" } }
 
-
   context 'when the request is correct' do
     let(:body) { File.read('spec/fixtures/meme_test.json') }
 

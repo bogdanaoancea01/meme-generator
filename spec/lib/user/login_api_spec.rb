@@ -14,53 +14,52 @@ RSpec.describe 'Login API' do
     Sinatra::Application
   end
 
-    context 'when the username does not exist' do
-        let(:body) { File.read('spec/fixtures/user/user_test.json') }
+  context 'when the username does not exist' do
+    let(:body) { File.read('spec/fixtures/user/user_test.json') }
 
-        it 'returns status code 409' do
-            post '/login', body, { 'CONTENT_TYPE' => 'application/json' }
+    it 'returns status code 409' do
+      post '/login', body, { 'CONTENT_TYPE' => 'application/json' }
 
-            expect(last_response.status).to eq(409)
-        end
+      expect(last_response.status).to eq(409)
+    end
+  end
+
+  context 'when the password is incorrect' do
+    let(:body) { File.read('spec/fixtures/user/user_test.json') }
+
+    before do
+      User.create!(username: 'mr_bean', password: BCrypt::Password.create('wrong_password').to_s)
     end
 
-    context 'when the password is incorrect' do
-        let(:body) { File.read('spec/fixtures/user/user_test.json') }
+    it 'returns status code 409' do
+      post '/login', body, { 'CONTENT_TYPE' => 'application/json' }
 
-        before do
-            User.create!(username: 'mr_bean', password: BCrypt::Password.create('wrong_password').to_s)
-        end
+      expect(last_response.status).to eq(409)
+    end
+  end
 
-        it 'returns status code 409' do
-            post '/login', body, { 'CONTENT_TYPE' => 'application/json' }
+  context 'when username and password are correct' do
+    let(:body) { File.read('spec/fixtures/user/user_test.json') }
 
-            expect(last_response.status).to eq(409)
-        end
+    before do
+      User.create!(username: 'mr_bean', password: BCrypt::Password.create('test123').to_s)
     end
 
-    context 'when username and password are correct' do
-        let(:body) { File.read('spec/fixtures/user/user_test.json') }
+    it 'returns status code 200 and a token' do
+      post '/login', body, { 'CONTENT_TYPE' => 'application/json' }
 
-        before do
-            User.create!(username: 'mr_bean', password: BCrypt::Password.create('test123').to_s)
-        end
-
-        it 'returns status code 200 and a token' do
-            post '/login', body, { 'CONTENT_TYPE' => 'application/json' }
-
-            expect(last_response.status).to eq(200)
-            token = JSON.parse(last_response.body)['token']
-            expect(token).not_to be_nil
-        end
-
-
-        it 'returns 200 and a valid token' do
-            post '/login', body, { 'CONTENT_TYPE' => 'application/json' }
-
-            expect(last_response.status).to eq(200)
-            token = JSON.parse(last_response.body)['token']
-            decoded_payload, = JWT.decode(token, UserController::JWT_SECRET_KEY, true, algorithm: 'HS256')
-            expect(decoded_payload['username']).to eq('mr_bean')
-        end
+      expect(last_response.status).to eq(200)
+      token = JSON.parse(last_response.body)['token']
+      expect(token).not_to be_nil
     end
+
+    it 'returns 200 and a valid token' do
+      post '/login', body, { 'CONTENT_TYPE' => 'application/json' }
+
+      expect(last_response.status).to eq(200)
+      token = JSON.parse(last_response.body)['token']
+      decoded_payload, = JWT.decode(token, UserController::JWT_SECRET_KEY, true, algorithm: 'HS256')
+      expect(decoded_payload['username']).to eq('mr_bean')
+    end
+  end
 end

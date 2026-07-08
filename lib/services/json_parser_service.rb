@@ -8,6 +8,7 @@ class JsonParserService
     return nil if root.nil? || root.empty?
 
     return Meme.new(root['image_url'], root['text']) if keyword == 'meme'
-    return User.new(username: root['username'], password: root['password']) if keyword == 'user'
+
+    User.new(username: root['username'], password: root['password']) if keyword == 'user'
   end
 end
