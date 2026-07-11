@@ -22,10 +22,10 @@ RSpec.describe 'Meme API' do
   context 'when the request is correct' do
     let(:body) { File.read('spec/fixtures/meme_test.json') }
 
-    it 'returns status code 303' do
+    it 'returns status code 307' do
       post '/memes', body, headers
 
-      expect(last_response.status).to eq(303)
+      expect(last_response.status).to eq(307)
     end
   end
 

@@ -31,7 +31,7 @@ post '/memes' do
   response = MemeController.new.execute(body)
 
   if response.message.nil?
-    redirect "/memes/#{response.redirect_url}", 303
+    redirect "/memes/#{response.redirect_url}", 307
   else
     halt 400, { 'Content-Type' => 'application/json' }, { message: response.message }.to_json
   end
@@ -46,8 +46,7 @@ post '/signup' do
   body = JSON.parse(request.body.read)
   new_user = UserController.new.signup(body)
 
-  halt 409, { 'Content-Type' => 'application/json' }, '' if new_user.nil?
-
+  halt 409 unless new_user
   if new_user.errors.any?
     halt 400, { 'Content-Type' => 'application/json' }, { errors: new_user.errors.map do |e|
       { message: e.message }
