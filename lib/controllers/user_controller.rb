@@ -1,17 +1,17 @@
 require 'sinatra/activerecord'
-require './lib/services/json_parser_service'
+require './lib/services/user_input'
 require 'dotenv/load'
 require 'jwt'
 
 class UserController
   JWT_SECRET_KEY = ENV['JWT_SECRET']
 
-  def initialize(parser: JsonParserService.new)
+  def initialize(parser: UserInput.new)
     @parser = parser
   end
 
   def signup(body)
-    new_user = @parser.parse(body, 'user')
+    new_user = @parser.parse(body)
 
     add_errors(new_user)
 
@@ -26,7 +26,7 @@ class UserController
   end
 
   def login(body)
-    user = @parser.parse(body, 'user')
+    user = @parser.parse(body)
     return false if user.nil?
 
     found_user = User.find_by(username: user.username)

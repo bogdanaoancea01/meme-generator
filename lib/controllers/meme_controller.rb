@@ -2,21 +2,21 @@
 
 require './lib/services/image_download_service'
 require './lib/services/meme_generator_service'
-require './lib/dtos/meme'
+require './lib/models/meme'
 require './lib/dtos/meme_response'
-require './lib/services/json_parser_service'
+require './lib/services/meme_input'
 require 'json'
 
 class MemeController
   def initialize(downloader: ImageDownloadService.new, generator: MemeGeneratorService.new,
-                 parser: JsonParserService.new)
+                 parser: MemeInput.new)
     @downloader = downloader
     @generator = generator
     @parser = parser
   end
 
   def execute(body)
-    meme = @parser.parse(body, 'meme')
+    meme = @parser.parse(body)
 
     error_message = validate_meme(meme)
     return MemeResponse.new(message: error_message) if error_message

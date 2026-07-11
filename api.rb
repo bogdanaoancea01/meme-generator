@@ -7,7 +7,7 @@ require 'json'
 require 'bcrypt'
 require './lib/controllers/meme_controller'
 require './lib/controllers/user_controller'
-require './lib/dtos/meme'
+require './lib/models/meme'
 require './lib/services/image_download_service'
 require './lib/models/user'
 
