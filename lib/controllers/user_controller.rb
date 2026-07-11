@@ -33,7 +33,7 @@ class UserController
     found_user = User.find_by(username: user.username)
     return false if found_user.nil?
 
-    return false unless PasswordHasher.check_hash(found_user.password) == user.password
+    return false unless PasswordHasher.check_hash(found_user.password, user.password)
 
     found_user.token = generate_token(found_user.username)
     found_user.save

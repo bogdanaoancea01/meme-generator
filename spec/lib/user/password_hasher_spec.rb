@@ -21,12 +21,15 @@ RSpec.describe PasswordHasher do
     end
 
     describe '.check_hash' do
-        let(:password) {'1234password'}
+        context 'when the passwords match' do
+            let(:password) {'1234password'}
+            let(:hashed_password) {PasswordHasher.hash(password)}
 
-        it 'returns the hash for passwords comparisson' do
-            hashed_password = described_class.hash(password)
+            it 'returns the true' do
+                result = described_class.check_hash(hashed_password, password)
 
-            expect(hashed_password).not_to eq(password)
+                expect(result).to be(true)
+            end
         end
     end
 end
