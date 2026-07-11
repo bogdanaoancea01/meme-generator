@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require '././lib/controllers/user_controller'
+require '././lib/errors/existing_user_error'
 
 RSpec.describe UserController do
   describe '#signup' do
@@ -13,7 +14,7 @@ RSpec.describe UserController do
         expect(result).to be_a(User)
       end
 
-      it 'saves the user with a hashed password' do
+      it 'returns the user with a hashed password' do
         described_class.new.signup(JSON.parse(body))
 
         saved_user = User.find_by(username: 'mr_bean')
@@ -52,10 +53,8 @@ RSpec.describe UserController do
         User.create!(username: 'mr_bean', password: BCrypt::Password.create('test123').to_s)
       end
 
-      it 'returns nil' do
-        result = described_class.new.signup(JSON.parse(body))
-
-        expect(result).to be_nil
+      it 'raises an ExistingUserError error' do
+        expect{described_class.new.signup(JSON.parse(body))}.to raise_error(ExistingUserError)
       end
     end
   end

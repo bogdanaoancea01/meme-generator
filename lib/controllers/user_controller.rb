@@ -1,5 +1,7 @@
 require 'sinatra/activerecord'
 require './lib/services/user_input'
+require './lib/errors/existing_user_error'
+require './lib/errors/validation_error'
 require './lib/services/password_hasher'
 require 'dotenv/load'
 require 'jwt'
@@ -17,8 +19,8 @@ class UserController
     add_errors(new_user)
 
     return new_user if new_user.errors.any?
-    return nil if User.find_by(username: new_user.username)
-
+    raise ExistingUserError if User.find_by(username: new_user.username)
+    
     new_user.password = PasswordHasher.hash(new_user.password)
     new_user.token = generate_token(new_user.username)
     new_user.save

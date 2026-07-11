@@ -10,6 +10,7 @@ require './lib/controllers/user_controller'
 require './lib/models/meme'
 require './lib/services/image_download_service'
 require './lib/models/user'
+require './lib/errors/existing_user_error'
 
 set :database_file, 'config/database.yml'
 
@@ -21,6 +22,10 @@ helpers do
     user = User.find_by(token: token)
     halt 401 unless user
   end
+end
+
+error ExistingUserError do
+  409
 end
 
 post '/memes' do
@@ -46,7 +51,6 @@ post '/signup' do
   body = JSON.parse(request.body.read)
   new_user = UserController.new.signup(body)
 
-  halt 409 unless new_user
   if new_user.errors.any?
     halt 400, { 'Content-Type' => 'application/json' }, { errors: new_user.errors.map do |e|
       { message: e.message }
