@@ -1,5 +1,6 @@
 require 'sinatra/activerecord'
 require './lib/services/user_input'
+require './lib/services/password_hasher'
 require 'dotenv/load'
 require 'jwt'
 
@@ -18,7 +19,7 @@ class UserController
     return new_user if new_user.errors.any?
     return nil if User.find_by(username: new_user.username)
 
-    new_user.password = BCrypt::Password.create(new_user.password).to_s
+    new_user.password = PasswordHasher.hash(new_user.password)
     new_user.token = generate_token(new_user.username)
     new_user.save
 
@@ -32,7 +33,7 @@ class UserController
     found_user = User.find_by(username: user.username)
     return false if found_user.nil?
 
-    return false unless BCrypt::Password.new(found_user.password) == user.password
+    return false unless PasswordHasher.check_hash(found_user.password) == user.password
 
     found_user.token = generate_token(found_user.username)
     found_user.save
