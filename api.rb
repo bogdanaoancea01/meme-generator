@@ -28,6 +28,11 @@ error ExistingUserError do
   409
 end
 
+error ValidationError do
+  error = env['sinatra.error']
+  halt 400, { 'Content-Type' => 'application/json' }, { errors: error.errors }.to_json
+end
+
 post '/memes' do
   authorization!
 
@@ -50,12 +55,6 @@ end
 post '/signup' do
   body = JSON.parse(request.body.read)
   new_user = UserController.new.signup(body)
-
-  if new_user.errors.any?
-    halt 400, { 'Content-Type' => 'application/json' }, { errors: new_user.errors.map do |e|
-      { message: e.message }
-    end }.to_json
-  end
 
   [201, { 'Content-Type' => 'application/json' }, { token: new_user.token }.to_json]
 end

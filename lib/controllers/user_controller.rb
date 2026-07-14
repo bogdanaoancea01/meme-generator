@@ -18,7 +18,7 @@ class UserController
 
     add_errors(new_user)
 
-    return new_user if new_user.errors.any?
+    raise ValidationError.new(new_user.errors.map { |e| { message: e.message } }) if new_user.errors.any?
     raise ExistingUserError if User.find_by(username: new_user.username)
     
     new_user.password = PasswordHasher.hash(new_user.password)
@@ -51,9 +51,6 @@ class UserController
 
   def add_errors(user)
     user.errors.add(:username, :blank, message: 'Username is blank') if user.username.nil? || user.username.empty?
-
-    return unless user.password.nil? || user.password.empty?
-
-    user.errors.add(:password, :blank, message: 'Password is blank')
+    user.errors.add(:password, :blank, message: 'Password is blank') if user.password.nil? || user.password.empty?
   end
 end

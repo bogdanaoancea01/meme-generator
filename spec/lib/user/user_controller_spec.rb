@@ -2,6 +2,7 @@
 
 require '././lib/controllers/user_controller'
 require '././lib/errors/existing_user_error'
+require '././lib/errors/validation_error'
 
 RSpec.describe UserController do
   describe '#signup' do
@@ -27,22 +28,20 @@ RSpec.describe UserController do
     context 'when username is missing' do
       let(:body) { File.read('spec/fixtures/user/no_username_test.json') }
 
-      it 'returns a User with a blank username error' do
-        result = described_class.new.signup(JSON.parse(body))
-
-        expect(result).to be_a(User)
-        expect(result.errors[:username]).to include('Username is blank')
+      it 'raises a ValidationError with the username message' do
+        expect {
+          described_class.new.signup(JSON.parse(body))
+        }.to raise_error(ValidationError, 'Username is blank')
       end
     end
 
     context 'when password is missing' do
       let(:body) { File.read('spec/fixtures/user/no_password_test.json') }
 
-      it 'returns a User with a blank password error' do
-        result = described_class.new.signup(JSON.parse(body))
-
-        expect(result).to be_a(User)
-        expect(result.errors[:password]).to include('Password is blank')
+      it 'raises a ValidationError with the password message' do
+        expect {
+          described_class.new.signup(JSON.parse(body))
+        }.to raise_error(ValidationError, 'Password is blank')
       end
     end
 
