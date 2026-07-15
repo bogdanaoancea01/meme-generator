@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Response
+class MemeResponse
   attr_reader :message, :redirect_url
 
   def initialize(message: nil, redirect_url: nil)

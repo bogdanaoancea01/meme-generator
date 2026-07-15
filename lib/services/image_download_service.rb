@@ -13,10 +13,10 @@ class ImageDownloadService
       URI.open(url) do |image|
         data = image.read(MAX_FILE_SIZE_BYTES + 1)
         return nil if data.bytesize > MAX_FILE_SIZE_BYTES
+
         File.binwrite(file_path, data)
       end
       file_path
-
     rescue StandardError
       nil
     end
